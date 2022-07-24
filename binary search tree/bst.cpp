@@ -1,4 +1,5 @@
 #include <iostream>
+#include <queue>
 using namespace std;
 
 struct BstNode {
@@ -16,7 +17,7 @@ BstNode* GetNewNode(int data) {
 
 
 
-BstNode* Inset(BstNode *root, int data) {
+BstNode* Inset(BstNode* root, int data) {
   if (root == NULL) {
     root = GetNewNode(data);
   } else if (data <= root->data) {
@@ -28,7 +29,8 @@ BstNode* Inset(BstNode *root, int data) {
 }
 
 // Another way to implement inserting a node
-// void Insert(BstNode **root, int data) {
+
+// void Insert(BstNode** root, int data) {
 //   if (*root == NULL) {
 //     *root = GetNewNode(data);
 //   } else if (data <= (*root)->data) {
@@ -38,7 +40,7 @@ BstNode* Inset(BstNode *root, int data) {
 //   }
 // }
 
-bool Search(BstNode *root, int data) {
+bool Search(BstNode* root, int data) {
   if (root == NULL) {
     return false;
   } else if (data == root->data) {
@@ -49,6 +51,40 @@ bool Search(BstNode *root, int data) {
     return Search(root->right, data);
   }
 }
+
+void LevelbyLevelPrinting(BstNode* root) {
+  if (root == NULL) {
+    return;
+  }
+  int levelCount = 1;
+  int currentCount = 0;
+  BstNode* currentNode;
+  queue<BstNode*> nodeQueue;
+  nodeQueue.push(root);
+  
+  while (!nodeQueue.empty()) {
+    currentNode = nodeQueue.front();
+    if (currentNode->left) {
+      nodeQueue.push(currentNode->left);
+      currentCount++;
+    }
+    if (currentNode->right) {
+      nodeQueue.push(currentNode->right);
+      currentCount++;
+    }
+    cout << currentNode->data;
+    cout << " ";
+    nodeQueue.pop();
+    levelCount--;
+    if (levelCount == 0) {
+      cout << "\n";
+      levelCount = currentCount;
+      currentCount = 0;
+    }
+  }
+  return;
+}
+
 
 int main() {
   BstNode *root = NULL;
@@ -68,7 +104,6 @@ int main() {
  
   root = Inset(root, 20);
   
-
-  cout << root->left->data;
+  LevelbyLevelPrinting(root);
   return 0;
 }
